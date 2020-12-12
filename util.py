@@ -38,9 +38,55 @@ def markdown_twitter_hashtags(text):
                   text)
 
 
+def de_emojify(text):
+        return text.encode('ascii', 'ignore').decode('ascii').replace("  ", " ")
+
+
 def prepare_tweet_text(text):
     """Do all escape things for tweet text"""
-    res = escape_markdown(text)
+    res = de_emojify(text)
+    res = escape_markdown(res)
     res = markdown_twitter_usernames(res)
     res = markdown_twitter_hashtags(res)
     return res
+
+def validate_volume(tweet):
+
+    text = tweet.text
+
+    try:
+        x = re.search("[Sell|Buy] (.*) @", text).group(1)
+        if "+" in x:
+            value = 0
+            for number in x.split("+"):
+                value += int(number.replace(",",""))
+        else:
+            value = int(x.replace(",",""))
+
+        if value >= 40_000:
+            return True
+        else:
+            return False
+
+    except AttributeError:
+        return True
+
+
+def validate_coins(tweet):
+
+    if tweet.screen_name == "BXRekt":
+        text = tweet.text
+        if (not "XBT" in text or "XBTUSD" in text) and text.startswith("Liquidated"):
+            return True
+        else:
+            return False
+    else:
+        return False
+        
+
+def validate_tweet(tweet):
+    
+    if validate_volume(tweet) == True and validate_coins(tweet) == True:
+        return True
+    else:
+        return False
