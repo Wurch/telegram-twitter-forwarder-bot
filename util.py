@@ -81,7 +81,7 @@ def validate_coins(tweet):
         else:
             return False
     else:
-        return False
+        return True
         
 
 def validate_tweet(tweet):
