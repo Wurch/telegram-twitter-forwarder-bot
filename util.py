@@ -39,12 +39,24 @@ def markdown_twitter_hashtags(text):
 
 
 def de_emojify(text):
-        return text.encode('ascii', 'ignore').decode('ascii').replace("  ", " ")
+        return text.encode('ascii', 'ignore').decode('ascii')
 
+
+def simplify_message(text):
+    splitted_text = text.split("  ")
+    if len(splitted_text) == 2:
+        return splitted_text[0]
+    elif splitted_text == 1 and "Liquidation" in text:
+        splitted_text = text.split(" - ")
+        return splitted_text
+    else:
+        return text
+    
 
 def prepare_tweet_text(text):
     """Do all escape things for tweet text"""
     res = de_emojify(text)
+    res = simplify_message(res)
     res = escape_markdown(res)
     res = markdown_twitter_usernames(res)
     res = markdown_twitter_hashtags(res)
@@ -76,7 +88,11 @@ def validate_coins(tweet):
 
     if tweet.screen_name in ["BXRekt", "whalecalls", "rektbybit"]:
         text = tweet.text
-        if (not "XBT" in text or "XBTUSD" in text) and (not "XRP" in text) and (not "TRX" in text) and (text.startswith("Liquidated") or "Liquidation" in text):
+        if (not "XBT" in text or "XBTUSD" in text) \
+            and (not "XRP" in text) \
+            and (not "TRX" in text) \
+            and (not "ADA" in text) \
+            and (text.startswith("Liquidated") or "Liquidation" in text):
             return True
         else:
             return False
