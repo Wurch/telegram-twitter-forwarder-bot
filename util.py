@@ -76,7 +76,7 @@ def validate_coins(tweet):
 
     if tweet.screen_name in ["BXRekt", "whalecalls", "rektbybit"]:
         text = tweet.text
-        if (not "XBT" in text or "XBTUSD" in text) and (not "XRP" in text) and (text.startswith("Liquidated") or "Liquidation" in text):
+        if (not "XBT" in text or "XBTUSD" in text) and (not "XRP" in text) and (not "TRX" in text) and (text.startswith("Liquidated") or "Liquidation" in text):
             return True
         else:
             return False

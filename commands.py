@@ -303,4 +303,5 @@ def cmd_set_timezone(bot, update, args, chat):
 
 @with_touched_chat
 def handle_chat(bot, update, chat=None):
-    bot.reply(update, "Hey! Use commands to talk with me, please! See /help")
+    pass
+    #bot.reply(update, "Hey! Use commands to talk with me, please! See /help")
