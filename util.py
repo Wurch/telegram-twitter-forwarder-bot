@@ -67,27 +67,77 @@ def validate_volume(tweet):
     text = tweet.text
 
     try:
-        x = re.search("[Sell|Buy] (.*) @", text).group(1)
-        if "+" in x:
-            value = 0
-            for number in x.split("+"):
-                value += int(number.replace(",",""))
-        else:
-            value = int(x.replace(",",""))
+        if tweet.screen_name == "BXRekt":
+            x = re.search("[Sell|Buy] (.*) @", text).group(1)
+            if "+" in x:
+                value = 0
+                for number in x.split("+"):
+                    value += int(number.replace(",",""))
+            else:
+                value = int(x.replace(",",""))
 
-        if value >= 40_000:
-            return True
-        else:
-            return False
-
+            if value >= 40_000:
+                return True
+            else:
+                return False
+        elif tweet.screen_name == "whalecalls":
+            x = re.search("Liquidation: (.*) contracts", text)
+            if x.group(1):
+                value = int(x)
+                if value >= 5_000:
+                    return True
+                else:
+                    return False
+            elif re.search("Liquidation: (.*) BTC", text) != None:
+                x = re.search("Liquidation: (.*) BTC", text)
+                if x.group(1):
+                value = float(x)
+                if value >= 1:
+                    return True
+                else:
+                    return False
+            else:
+                return True
+        elif tweet.screen_name == "WhaleBotRektd":
+            if "HuobiDM" in text:
+                x = re.search("@ (.*):", text).group(1)
+                value = int(x.replace(",",""))
+                if value >= 5_000:
+                    return True
+                else:
+                    return False
+            elif "OKEx" in text:
+                x = re.search("[Sell|Buy] \$(.*)", text).group(1)
+                value = int(x.replace(",",""))
+                if value >= 5_000:
+                    return True
+                else:
+                    return False
+            elif "Bybit" in text:
+                x = re.search("[Sell|Buy] (.*)", text).group(1)
+                value = int(x.replace(",",""))
+                if value >= 5_000:
+                    return True
+                else:
+                    return False
+            elif "Binance" in text:
+                x = re.search("[Sell|Buy] \$(.*)", text).group(1)
+                value = int(x.replace(",",""))
+                if value >= 5_000:
+                    return True
+                else:
+                    return False
+            else:
+                return True
     except AttributeError:
         return True
 
 
 def validate_coins(tweet):
 
-    if tweet.screen_name in ["BXRekt", "whalecalls", "rektbybit"]:
+    if tweet.screen_name in ["BXRekt", "whalecalls", "WhaleBotRektd"]:
         text = tweet.text
+        print(text)
         if (not "XBT" in text or "XBTUSD" in text) \
             and (not "XRP" in text) \
             and (not "TRX" in text) \
