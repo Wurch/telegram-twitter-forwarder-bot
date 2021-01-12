@@ -50,7 +50,7 @@ class TwitterForwarderBot(Bot):
     """
                         .format(
                         link_preview=photo_url,
-                        text=prepare_tweet_text(tweet.text),
+                        text=prepare_tweet_text(tweet.text, tweet),
                         name=escape_markdown(tweet.name),
                         screen_name=tweet.screen_name,
                         created_at=created_at,

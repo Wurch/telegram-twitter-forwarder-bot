@@ -42,21 +42,21 @@ def de_emojify(text):
         return text.encode('ascii', 'ignore').decode('ascii')
 
 
-def simplify_message(text):
-    splitted_text = text.split("  ")
-    if len(splitted_text) == 2:
-        return splitted_text[0]
-    elif splitted_text == 1 and "Liquidation" in text:
-        splitted_text = text.split(" - ")
-        return splitted_text
+def simplify_message(text, tweet):
+    if tweet.screen_name == "BXRekt":
+        return text.split("~")[0]
+    elif tweet.screen_name == "whalecalls":
+        return text.split(" - ")[0]
+    elif tweet.screen_name == "WhaleBotRektd": 
+        return text
     else:
         return text
     
 
-def prepare_tweet_text(text):
+def prepare_tweet_text(text, tweet):
     """Do all escape things for tweet text"""
     res = de_emojify(text)
-    res = simplify_message(res)
+    res = simplify_message(res, tweet)
     res = escape_markdown(res)
     res = markdown_twitter_usernames(res)
     res = markdown_twitter_hashtags(res)
