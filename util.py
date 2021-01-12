@@ -76,22 +76,22 @@ def validate_volume(tweet):
             else:
                 value = int(x.replace(",",""))
 
-            if value >= 40_000:
+            if value >= 5_000:
                 return True
             else:
                 return False
         elif tweet.screen_name == "whalecalls":
             x = re.search("Liquidation: (.*) contracts", text)
-            if x.group(1):
-                value = int(x)
+            if x:
+                value = x.group(1)
+                value = int(value.replace(",",""))
                 if value >= 5_000:
                     return True
                 else:
                     return False
             elif re.search("Liquidation: (.*) BTC", text) != None:
-                x = re.search("Liquidation: (.*) BTC", text)
-                if x.group(1):
-                value = float(x)
+                x = re.search("Liquidation: (.*) BTC", text).group(1)
+                value = float(x.replace(",",""))
                 if value >= 1:
                     return True
                 else:
