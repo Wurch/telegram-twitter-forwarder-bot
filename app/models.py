@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import tweepy
 from peewee import (Model, DateTimeField, ForeignKeyField, BigIntegerField, CharField,
@@ -6,7 +7,10 @@ from peewee import (Model, DateTimeField, ForeignKeyField, BigIntegerField, Char
 from playhouse.migrate import migrate, SqliteMigrator, SqliteDatabase
 from tweepy.auth import OAuthHandler
 
-db = SqliteDatabase('peewee.db', timeout=10)
+dirname = os.path.dirname(__file__)
+db_path = os.path.join(dirname, '../db/peewee.db')
+
+db = SqliteDatabase(db_path, timeout=10)
 
 class BaseModel(Model):
     class Meta:
