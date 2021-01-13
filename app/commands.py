@@ -54,6 +54,7 @@ igor_id = 75531235
 @with_touched_chat
 def cmd_sub(bot, update, args, chat=None):
     if update.message.from_user.id == igor_id:
+    #if igor_id == igor_id:
         if len(args) < 1:
             bot.reply(update, "Use /sub username1 username2 username3 ...")
             return
