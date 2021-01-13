@@ -49,52 +49,56 @@ This bot is free open source software, check /source if you want to host it!
                   disable_web_page_preview=True,
                   parse_mode=telegram.ParseMode.MARKDOWN)
 
+igor_id = 75531235
 
 @with_touched_chat
 def cmd_sub(bot, update, args, chat=None):
-    if len(args) < 1:
-        bot.reply(update, "Use /sub username1 username2 username3 ...")
-        return
-    tw_usernames = args
-    not_found = []
-    already_subscribed = []
-    successfully_subscribed = []
+    if update.message.from_user.id == igor_id:
+        if len(args) < 1:
+            bot.reply(update, "Use /sub username1 username2 username3 ...")
+            return
+        tw_usernames = args
+        not_found = []
+        already_subscribed = []
+        successfully_subscribed = []
 
-    for tw_username in tw_usernames:
-        tw_user = bot.get_tw_user(tw_username)
+        for tw_username in tw_usernames:
+            tw_user = bot.get_tw_user(tw_username)
 
-        if tw_user is None:
-            not_found.append(tw_username)
-            continue
+            if tw_user is None:
+                not_found.append(tw_username)
+                continue
 
-        if Subscription.select().where(
-                Subscription.tw_user == tw_user,
-                Subscription.tg_chat == chat).count() == 1:
-            already_subscribed.append(tw_user.full_name)
-            continue
+            if Subscription.select().where(
+                    Subscription.tw_user == tw_user,
+                    Subscription.tg_chat == chat).count() == 1:
+                already_subscribed.append(tw_user.full_name)
+                continue
 
-        Subscription.create(tg_chat=chat, tw_user=tw_user)
-        successfully_subscribed.append(tw_user.full_name)
+            Subscription.create(tg_chat=chat, tw_user=tw_user)
+            successfully_subscribed.append(tw_user.full_name)
 
-    reply = ""
+        reply = ""
 
-    if len(not_found) is not 0:
-        reply += "Sorry, I didn't find username{} {}\n\n".format(
-                     "" if len(not_found) is 1 else "s",
-                     ", ".join(not_found)
-                 )
+        if len(not_found) is not 0:
+            reply += "Sorry, I didn't find username{} {}\n\n".format(
+                        "" if len(not_found) is 1 else "s",
+                        ", ".join(not_found)
+                    )
 
-    if len(already_subscribed) is not 0:
-        reply += "You're already subscribed to {}\n\n".format(
-                     ", ".join(already_subscribed)
-                 )
+        if len(already_subscribed) is not 0:
+            reply += "You're already subscribed to {}\n\n".format(
+                        ", ".join(already_subscribed)
+                    )
 
-    if len(successfully_subscribed) is not 0:
-        reply += "I've added your subscription to {}".format(
-                     ", ".join(successfully_subscribed)
-                 )
+        if len(successfully_subscribed) is not 0:
+            reply += "I've added your subscription to {}".format(
+                        ", ".join(successfully_subscribed)
+                    )
 
-    bot.reply(update, reply)
+        bot.reply(update, reply)
+    else:
+        bot.reply(update, "Not allowed to use this command, contact @tradergoat for bot usage.")
 
 
 @with_touched_chat
